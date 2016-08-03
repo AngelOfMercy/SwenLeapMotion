@@ -1,16 +1,25 @@
 package display;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
+
+import world.world;
+
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class Display {
+	
+	private world w;
 
 	private JFrame frame;
+	private GalleryPanel gallery;
+	private ViewPanel view;
 
 	/**
 	 * Launch the application.
@@ -19,7 +28,7 @@ public class Display {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Display window = new Display();
+					Display window = new Display(new world());
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,8 +40,9 @@ public class Display {
 	/**
 	 * Create the application.
 	 */
-	public Display() {
+	public Display(world w) {
 		initialize();
+		this.w = w;
 	}
 
 	/**
@@ -47,13 +57,43 @@ public class Display {
 		splitPane.setResizeWeight(0.2);
 		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		splitPane.setLeftComponent(panel);
+		gallery = new JPanel();
+		gallery.setBackground(Color.WHITE);
+		splitPane.setLeftComponent(gallery);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
-		splitPane.setRightComponent(panel_1);
+		view = new MyPanel();
+		view.setBackground(Color.WHITE);
+		splitPane.setRightComponent(view);
+	}
+	
+	public void redraw(){
+		view.repaint();
 	}
 
+	 class ViewPanel extends JPanel {
+
+	        ViewPanel() {
+	        }
+
+	        @Override
+	        public void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            
+	            //TODO: Draw the view
+	        }
+	    }
+	 
+	 class GalleryPanel extends JPanel {
+		 
+		 GalleryPanel() {
+			 
+		 }
+		 
+		 @Override
+		 public void paintComponent(Graphics g) {
+			 super.paintComponent(g);
+			 
+			 //TODO: Draw the view
+		 }
+	 }
 }
