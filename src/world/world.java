@@ -43,7 +43,6 @@ public class World {
 	 * @return If an object was found and selected at the given co-ordinate.
 	 */
 	public boolean selectElementAt(int x, int y){
-		//TODO
 		for(Element e : world_obj){
 			int width = e.getImage().getWidth();
 			int height = e.getImage().getHeight();
