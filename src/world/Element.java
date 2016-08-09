@@ -12,6 +12,7 @@ public class Element {
 
 	private BufferedImage img;
 	private Point p;
+	private int z_value = 0;
 	
 	private static final int default_x = 0, default_y = 0;
 	
@@ -68,6 +69,16 @@ public class Element {
 	 */
 	public void setPoint(Point p){
 		this.p = p;
+	}
+	
+	public int getZ_Value(){
+		return z_value;
+	}
+	
+	public void setZ_Value(int z){
+		if(z < -5 || z > 5)
+			throw new IllegalArgumentException();
+		z_value = z;
 	}
 
 	public void setImage(BufferedImage img) {
