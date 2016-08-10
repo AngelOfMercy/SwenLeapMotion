@@ -102,7 +102,7 @@ public class Display {
 	            	x += 10;
 	            	y += 10;
 	            }
-	            //TODO: Draw the view
+	            //TODO: Draw cursor if xpos is negative
 	        }
 	    }
 	 
@@ -120,7 +120,7 @@ public class Display {
 				 Point p = el.getLocation();
 				 g.drawImage(el.getImage(), (int)p.getX(), (int)p.getY(), this);
 			 }
-			 //TODO: Draw the view
+			 //TODO: Draw the cursor if xpos is positive
 		 }
 	 }
 }
