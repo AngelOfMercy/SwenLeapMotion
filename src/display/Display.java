@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
+import com.leapmotion.leap.Controller;
+
 import world.Element;
 import world.World;
 
@@ -17,7 +19,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 
-public class Display {
+public class Display extends Controller{
 	
 	private World w;
 
@@ -46,6 +48,7 @@ public class Display {
 	 */
 	public Display(World w) {
 		initialize();
+		frame.setVisible(true);
 		this.w = w;
 	}
 
