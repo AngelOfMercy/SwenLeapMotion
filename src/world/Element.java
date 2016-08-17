@@ -80,6 +80,14 @@ public class Element {
 			throw new IllegalArgumentException();
 		z_value = z;
 	}
+	
+	public void increment_z(){
+		z_value = Math.min(5, ++z_value);
+	}
+	
+	public void decrement_z(){
+		z_value = Math.max(-5, --z_value);
+	}
 
 	public void setImage(BufferedImage img) {
 		this.img = img;

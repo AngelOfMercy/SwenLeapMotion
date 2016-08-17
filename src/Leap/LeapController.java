@@ -46,6 +46,7 @@ public class LeapController extends Listener{
     	Frame frame = controller.frame();
     	boolean gesturePerf = false;
     	GestureList gsl = frame.gestures();
+    	
     	for (int i = 0; i < gsl.count(); i++) {
             Gesture gesture = gsl.get(i);
 
@@ -57,7 +58,9 @@ public class LeapController extends Listener{
             	System.out.println("tap");
             	gesturePerf = true;
             	break;
+            	
             	//TODO:translate
+            	
             	//TODO: move
             	//TODO:scale
             	//TODO:x-axis translate
