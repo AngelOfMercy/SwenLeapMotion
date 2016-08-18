@@ -2,6 +2,8 @@ package world;
 
 
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,7 @@ public class Element {
 	private BufferedImage img;
 	private Point p;
 	private int z_value = 0;
+	private int rotation = 0;
 	
 	private static final int default_x = 0, default_y = 0;
 	
@@ -92,5 +95,11 @@ public class Element {
 	public void setImage(BufferedImage img) {
 		this.img = img;
 		
+	}
+
+	public void rotateImage(int degree) {		
+		AffineTransform tx = AffineTransform.getRotateInstance(Math.toRadians(degree), p.x, p.y);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+		img = op.filter(img, null);
 	}
 }
