@@ -68,37 +68,36 @@ public class LeapController extends Listener{
             }
     	}
     	
+    	
     	if(!gesturePerf){
     		if(!frame.hands().isEmpty()){
     			HandList hl = frame.hands();
     			for(int i = 0; i < hl.count(); i++){
     				Hand hand = hl.get(i);
     				int id = hand.id();
-    				for(int f = 1; i < 5; i++){
-    					if(controller.frame(f) != null){
-    						Frame prev = controller.frame(f);
+    					if(controller.frame(5) != null){
+    						Frame prev = controller.frame(5);
     						HandList phl = prev.hands();
     						for(int h = 0; h < phl.count(); h++){
-    							if(phl.get(h).equals(hand)){
+    							if(phl.get(h).id() ==(hand.id())){
     								Hand ph = phl.get(h);
     								if(hand.pinchStrength() > ph.pinchStrength() + 0.2){
-    									world.resizeImage(0.5);
+    									//world.resizeImage(0.5);
     									System.out.println("Shrink");
     								}
     								else if(hand.pinchStrength() < ph.pinchStrength() - 0.2){
-    									world.resizeImage(1.5);
+    									//world.resizeImage(1.5);
     									System.out.println("enlarge");
     								}
     							}
     						}
     					}
-    				}
     			}
     		}
     	}
     	display.redraw();
 
-    	System.out.println("frame" + count++);
+    	//System.out.println("frame" + count++);
     }
     public static void main(String args[]){
     	World world = new World();
