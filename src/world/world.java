@@ -3,7 +3,12 @@ package world;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 public class World {
 	
@@ -91,5 +96,41 @@ public class World {
 				(BufferedImage)(img.getScaledInstance((int)(img.getWidth() * scale), 
 						(int)(img.getHeight() * scale), 
 						BufferedImage.SCALE_DEFAULT)));
+	}
+	
+	public void loadImages(String folder){
+		// File representing the folder that you select using a FileChooser
+	    File dir = new File(folder);
+	    	    
+	    FilenameFilter IMAGE_FILTER = new FilenameFilter() {
+
+	        @Override
+	        public boolean accept(final File dir, final String name) {
+	        	// array of supported extensions (use a List if you prefer)
+	    	    String[] EXTENSIONS = new String[]{
+	    	        "gif", "png", "bmp", "jpg" // and other formats you need
+	    	    };
+	    	    
+	            for (final String ext : EXTENSIONS) {
+	                if (name.endsWith("." + ext)) {
+	                    return (true);
+	                }
+	            }
+	            return (false);
+	        }
+	    };
+	    
+	    
+	    
+	    for(File f : dir.listFiles(IMAGE_FILTER)){
+	    	try {
+				image_gallery.add(ImageIO.read(f));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	    
+	    
 	}
 }
