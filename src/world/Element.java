@@ -98,7 +98,9 @@ public class Element {
 	}
 
 	public void rotateImage(int degree) {		
-		AffineTransform tx = AffineTransform.getRotateInstance(Math.toRadians(degree), p.x, p.y);
+		AffineTransform tx = AffineTransform.getRotateInstance(Math.toRadians(degree), 
+				p.x + img.getWidth()/2, 
+				p.y + img.getHeight()/2);
 		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 		img = op.filter(img, null);
 	}
