@@ -98,11 +98,12 @@ public class LeapController extends Listener{
             	CircleGesture circle = new CircleGesture(gesture);
             	if(circle.normal().getZ() > 0){
             		//rotate counter clockwise
-            		
+            		world.rotateImage(-10);
             		System.out.println("rotating");
             	}
             	else {
             		//rotate clockwise
+            		world.rotateImage(10);
             		System.out.println("rotating");
             	}
             	gesturePerf = true;
@@ -122,7 +123,7 @@ public class LeapController extends Listener{
     				//System.out.println(hand.grabStrength());
     				if(hand.grabStrength() >= grabThreshold){//if it is a grab, do something
     					//System.out.println("True");
-    					Vector tl = hand.translation(frame);
+    					Vector tl = hand.translation(controller.frame(1));
     					int x_trans = (int) (tl.getX() * x_scalar);
     					int y_trans = (int) (tl.getY() * y_scalar);
     					Point p = world.getSelectedElement().getLocation();
@@ -168,13 +169,13 @@ public class LeapController extends Listener{
     						}
     					}
     					if(onlyIndex){
-    						Vector tl = hand.translation(frame);
-        					int x_trans = (int) (tl.getX() * x_scalar);
-        					int y_trans = (int) (tl.getY() * y_scalar);
+    						Vector tl = hand.translation(controller.frame(1));
+        					int x_trans = (int) (tl.getX() );//* x_scalar);
+        					int y_trans = (int) (tl.getY() );//* y_scalar);
         					Point p = world.getCursor();
         					p.x = p.x + x_trans;
         					p.y = p.y + y_trans;
-        					System.out.println("pointer Moved");
+        					System.out.println("pointer Moved " + p);
         					world.setCursor(p);
     					}
     			}

@@ -108,6 +108,11 @@ public class Display extends Controller{
 	            	y += 10;
 	            }
 	            //TODO: Draw cursor if xpos is negative
+
+				 Point curs = w.getCursor();
+				 if(curs.getX() <0){
+					 g.fillOval((int)curs.getX()+200, (int)curs.getY()+200, 10, 10);
+				 }
 	        }
 	    }
 	 
@@ -126,6 +131,10 @@ public class Display extends Controller{
 				 g.drawImage(el.getImage(), (int)p.getX(), (int)p.getY(), this);
 			 }
 			 //TODO: Draw the cursor if xpos is positive
+			 Point curs = w.getCursor();
+			 if(curs.getX() >=0){
+				 g.fillOval((int)curs.getX(), (int)curs.getY(), 10, 10);
+			 }
 		 }
 	 }
 }
