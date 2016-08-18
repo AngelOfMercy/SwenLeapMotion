@@ -50,6 +50,7 @@ public class Display extends Controller{
 		initialize();
 		frame.setVisible(true);
 		this.w = w;
+		w.loadImages("assets");
 	}
 
 	/**
