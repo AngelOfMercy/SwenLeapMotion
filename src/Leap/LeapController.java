@@ -1,6 +1,7 @@
 package Leap;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 
 import com.leapmotion.leap.*;
 import com.leapmotion.leap.Gesture.State;
@@ -57,10 +58,24 @@ public class LeapController extends Listener{
 
             switch (gesture.type()) {
             case TYPE_SCREEN_TAP:
+            	System.out.println("tap");
             	ScreenTapGesture screenTap = new ScreenTapGesture(gesture);
             	Vector loc = screenTap.position();
-            	//world.selectElementAt();
-            	System.out.println("tap");
+            	Point curs = world.getCursor();
+            	System.out.println(curs);
+            	if(curs.getX() < 0){
+            		BufferedImage image = display.getImage();
+            		if(image == null){
+            			System.out.println("no image");
+            			break;
+            		}
+            		world.addImageToWorld(100, 100, image);
+            		System.out.println("image added");
+            	}
+            	else {
+            		world.selectElementAt((int)curs.getX(), (int)curs.getY());
+            		System.out.println("selecting");
+            	}
             	gesturePerf = true;
             	break;
             	
@@ -131,9 +146,42 @@ public class LeapController extends Listener{
     					p.y = p.y + y_trans;
     					world.getSelectedElement().setPoint(p);
     					System.out.println("moved shit");
-    					break;
-    				}    				
-    					if(controller.frame(5) != null){
+
+    			    	display.redraw();
+    					return;
+    				}
+    				
+
+					FingerList fingerList = hand.fingers();
+					boolean onlyIndex = true;
+					boolean middle = false, ring = false, pinky = false;
+					int ind = 0;
+					for(int f = 0; f < fingerList.count(); f++){
+						if(fingerList.get(f).type().equals(Finger.Type.TYPE_INDEX)){
+							ind = f;
+							if(!fingerList.get(f).isExtended()){
+								onlyIndex = false;
+							}
+						}
+						else {
+							if(fingerList.get(f).isExtended()){
+								onlyIndex = false;
+							}
+						}
+						if(fingerList.get(f).type().equals(Finger.Type.TYPE_MIDDLE)){
+							middle = fingerList.get(f).isExtended();
+						}
+
+						if(fingerList.get(f).type().equals(Finger.Type.TYPE_RING)){
+							ring = fingerList.get(f).isExtended();
+						}
+						
+
+						if(fingerList.get(f).type().equals(Finger.Type.TYPE_PINKY)){
+							pinky = fingerList.get(f).isExtended();
+						}
+					}
+    					if(controller.frame(5) != null && middle && ring && pinky){
     						Frame prev = controller.frame(5);
     						HandList phl = prev.hands();
     						for(int h = 0; h < phl.count(); h++){
@@ -142,32 +190,19 @@ public class LeapController extends Listener{
     								if(hand.pinchStrength() > ph.pinchStrength() + pinchDifference){
     									//world.resizeImage(0.5);
     									System.out.println("Shrink");
-    									break;
+    									display.redraw();
+    			    					return;
     								}
     								else if(hand.pinchStrength() < ph.pinchStrength() - pinchDifference){
     									//world.resizeImage(1.5);
     									System.out.println("enlarge");
-    									break;
+    									display.redraw();
+    			    					return;
     								}
     							}
     						}
     					}
-    					FingerList fingerList = hand.fingers();
-    					boolean onlyIndex = true;
-    					int ind = 0;
-    					for(int f = 0; f < fingerList.count(); f++){
-    						if(fingerList.get(f).type().equals(Finger.Type.TYPE_INDEX)){
-    							ind = f;
-    							if(!fingerList.get(f).isExtended()){
-    								onlyIndex = false;
-    							}
-    						}
-    						else {
-    							if(fingerList.get(f).isExtended()){
-    								onlyIndex = false;
-    							}
-    						}
-    					}
+
     					if(onlyIndex){
     						Vector tl = hand.translation(controller.frame(1));
         					int x_trans = (int) (tl.getX() );//* x_scalar);
@@ -175,8 +210,9 @@ public class LeapController extends Listener{
         					Point p = world.getCursor();
         					p.x = p.x + x_trans;
         					p.y = p.y + y_trans;
-        					System.out.println("pointer Moved " + p);
         					world.setCursor(p);
+        					display.redraw();
+        					return;
     					}
     			}
     		}

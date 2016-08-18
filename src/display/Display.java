@@ -74,8 +74,22 @@ public class Display extends Controller{
 		splitPane.setRightComponent(view);
 	}
 	
+	public BufferedImage getImage(){
+		Point curs = w.getCursor();
+		int imageNumber = (int)curs.getY()/100;
+		imageNumber += ((int)curs.getX()+200)/100;
+		System.out.println(imageNumber);
+		ArrayList<BufferedImage> gal = w.getGallery();
+		System.out.println(gal.size());
+		if(imageNumber < gal.size()){
+			return gal.get(imageNumber);
+		}
+		return null;
+	}
+	
 	public void redraw(){
 		view.repaint();
+		gallery.repaint();
 		frame.setVisible(true);
 	}
 
@@ -108,10 +122,9 @@ public class Display extends Controller{
 	            	y += 10;
 	            }
 	            //TODO: Draw cursor if xpos is negative
-
 				 Point curs = w.getCursor();
 				 if(curs.getX() <0){
-					 g.fillOval((int)curs.getX()+200, (int)curs.getY()+200, 10, 10);
+					 g.fillOval((int)curs.getX()+200, (int)curs.getY(), 10, 10);
 				 }
 	        }
 	    }
