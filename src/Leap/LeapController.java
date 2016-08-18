@@ -53,7 +53,7 @@ public class LeapController extends Listener{
     	boolean gesturePerf = false;
     	GestureList gsl = frame.gestures();
     	
-    	for (int i = 0; i < gsl.count(); i++) {
+    	for (int i = 0; i < gsl.count(); i++) { //check to see if it is an inbuilt gesture
             Gesture gesture = gsl.get(i);
 
             switch (gesture.type()) {
@@ -152,7 +152,7 @@ public class LeapController extends Listener{
     				}
     				
 
-					FingerList fingerList = hand.fingers();
+					FingerList fingerList = hand.fingers();//check what fingers are extended
 					boolean onlyIndex = true;
 					boolean middle = false, ring = false, pinky = false;
 					int ind = 0;
@@ -181,7 +181,7 @@ public class LeapController extends Listener{
 							pinky = fingerList.get(f).isExtended();
 						}
 					}
-    					if(controller.frame(5) != null && middle && ring && pinky){
+    					if(controller.frame(5) != null && middle && ring && pinky){//check for a pinch with middle/ring/pinky extended
     						Frame prev = controller.frame(5);
     						HandList phl = prev.hands();
     						for(int h = 0; h < phl.count(); h++){
@@ -203,7 +203,7 @@ public class LeapController extends Listener{
     						}
     					}
 
-    					if(onlyIndex){
+    					if(onlyIndex){//move cursor if only the index finger is selected
     						Vector tl = hand.translation(controller.frame(1));
         					int x_trans = (int) (tl.getX() );//* x_scalar);
         					int y_trans = (int) (tl.getY() );//* y_scalar);
