@@ -16,6 +16,7 @@ public class World {
 	private ArrayList<BufferedImage> image_gallery;
 	private ArrayList<Element> world_obj;
 	private int selectedIndex;
+	private Point cursor = new Point(0,0);
 	
 	public World(){
 		image_gallery = new ArrayList<BufferedImage>();
@@ -30,6 +31,26 @@ public class World {
 		return world_obj;
 	}
 	
+	public void addImageToWorld(int x, int y, BufferedImage i){
+		world_obj.add(new Element(i, new Point(x, y)));
+	}
+	//--------------------------------------------------
+	//Cursor Manipulation
+	//--------------------------------------------------
+	public Point getCursor(){
+		return cursor;
+	}
+	
+	public void setCursor(Point p){
+		cursor = p;
+	}
+	
+	public void setCusor(int x, int y){
+		cursor = new Point(x, y);
+	}
+	//--------------------------------------------------
+	//Element Manipulation
+	//--------------------------------------------------
 	/**
 	 * Moves the selected object one 'set' closer to the user.
 	 * @return If the operation was successful
@@ -38,8 +59,26 @@ public class World {
 		if(selectedIndex == 0)
 			return false;
 		Element e = world_obj.remove(selectedIndex);
-		world_obj.add(--selectedIndex, e);
-		return true;	
+		e.increment_z();
+		
+		
+		
+		for(int i = selectedIndex; i <= world_obj.size(); ++i){
+			//If it gets to the end of the list, add it to the end.
+			if(i == world_obj.size()){
+				world_obj.add(e);
+				return true;
+			}
+			
+			else if(e.getZ_Value() >= world_obj.get(i).getZ_Value()){
+				world_obj.add(i, e);
+				return true;
+			}
+				
+			
+		}
+		
+		return false;	
 	}
 	/**
 	 * Returns the element at a give point in 2D space.
@@ -48,16 +87,16 @@ public class World {
 	 * @return If an object was found and selected at the given co-ordinate.
 	 */
 	public boolean selectElementAt(int x, int y){
+		System.out.println(x + " " + y);
 		for(Element e : world_obj){
 			int width = e.getImage().getWidth();
 			int height = e.getImage().getHeight();
 			Point p = e.getLocation();
-			
-			
-			if(p.getX() < x && 					//Horizontal minimum
-					(p.getX() + width) > x &&	//Horizontal Maximum
-					p.getY() < y &&				//Vertical Minimum
-					(p.getY() + height) <= y){	//Vertical Maximum
+						
+			if(p.getX() <= x && 					//Horizontal minimum
+					(p.getX() + width) >= x &&	//Horizontal Maximum
+					p.getY() <= y &&				//Vertical Minimum
+					(p.getY() + height) >= y){	//Vertical Maximum
 				selectedIndex = world_obj.indexOf(e);
 				return true;
 			};
@@ -70,11 +109,30 @@ public class World {
 	 * @return If the operation was successful.
 	 */
 	public boolean moveBackward(){
-		if(selectedIndex >= world_obj.size())
+		if(selectedIndex == 0)
 			return false;
 		Element e = world_obj.remove(selectedIndex);
-		world_obj.add(++selectedIndex, e);
-		return true;
+		e.decrement_z();
+		
+		
+		
+		for(int i = selectedIndex-1; i >= -1; --i){
+			System.out.println("Test:" + i);
+			//If it gets to the end of the list, add it to the end.
+			if(i == -1){
+				world_obj.add(0, e);
+				return true;
+			}
+			
+			else if(e.getZ_Value() >= world_obj.get(i).getZ_Value()){
+				world_obj.add(i, e);
+				return true;
+			}
+				
+			
+		}
+		
+		return false;	
 	}
 	
 	public Element getSelectedElement(){
