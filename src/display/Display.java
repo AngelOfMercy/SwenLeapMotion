@@ -48,9 +48,9 @@ public class Display extends Controller{
 	 */
 	public Display(World w) {
 		initialize();
-		frame.setVisible(true);
 		this.w = w;
 		w.loadImages("assets");
+		redraw();
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class Display extends Controller{
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1550, 900);
+		frame.setBounds(50, 50, 1000, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -76,11 +76,12 @@ public class Display extends Controller{
 	
 	public void redraw(){
 		view.repaint();
+		frame.setVisible(true);
 	}
 
-	 class ViewPanel extends JPanel {
+	 class GalleryPanel extends JPanel {
 
-	        ViewPanel() {
+	        GalleryPanel() {
 	        }
 
 	        @Override
@@ -91,15 +92,15 @@ public class Display extends Controller{
 	            for(BufferedImage bf: gallery){
 	            	int width = bf.getWidth();
 	            	int height = bf.getHeight();
-	            	int scale = 10;
+	            	int scale = 100;
 	            	if(width > height){
-	            		scale = width/10;
-	            		width = 10;
+	            		scale = width/100;
+	            		width = 100;
 	            		height = height/scale;
 	            	}
 	            	else{
-	            		scale = height/10;
-	            		height = 10;
+	            		scale = height/100;
+	            		height = 100;
 	            		width = width/scale;
 	            	}
 	            	g.drawImage(bf, x, y, width, height, this);
@@ -110,9 +111,9 @@ public class Display extends Controller{
 	        }
 	    }
 	 
-	 class GalleryPanel extends JPanel {
+	 class ViewPanel extends JPanel {
 		 
-		 GalleryPanel() {
+		 ViewPanel() {
 			 
 		 }
 		 

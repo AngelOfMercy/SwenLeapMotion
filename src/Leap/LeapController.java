@@ -10,6 +10,11 @@ import world.World;
 
 public class LeapController extends Listener{
 	
+
+	private final int x_scalar = 10, y_scalar = 10;
+	private final double pinchDifference = 0.2;
+	private final double grabThreshold = 0.9;
+	
 	private Display display;
 	private World world;
 	private int count;
@@ -59,38 +64,118 @@ public class LeapController extends Listener{
             	gesturePerf = true;
             	break;
             	
-            	//TODO:translate
+            case TYPE_SWIPE:
+            	SwipeGesture swipe = new SwipeGesture(gesture);
+            	HandList hl = swipe.hands();
+            	if(hl.get(0) != null){
+            		Hand h = hl.get(0);
+            		if(h.isLeft()){
+            			if(swipe.direction().getX() < 0){
+            				world.moveBackward();
+            				System.out.println("move back");
+            			}
+            			else if(swipe.direction().getX() > 0){
+            				world.moveForward();
+            				System.out.println("move forward");
+            			}
+            		}
+            		else if(h.isRight()){
+
+            			if(swipe.direction().getX() < 0){
+            				world.moveForward();
+            				System.out.println("move forward");
+            			}
+            			else if(swipe.direction().getX() > 0){
+            				world.moveBackward();
+            				System.out.println("move back");
+            			}
+            		}
+            	}
+            	gesturePerf = true;
+            	break;
+            	
+            case TYPE_CIRCLE:
+            	CircleGesture circle = new CircleGesture(gesture);
+            	if(circle.normal().getZ() > 0){
+            		//rotate counter clockwise
+            		
+            		System.out.println("rotating");
+            	}
+            	else {
+            		//rotate clockwise
+            		System.out.println("rotating");
+            	}
+            	gesturePerf = true;
+            	break;
             	
             	//TODO: move
-            	//TODO:scale
-            	//TODO:x-axis translate
             	//TODO:rotate
             }
     	}
     	
     	
-    	if(!gesturePerf){
+    	if(!gesturePerf){ //if no gesture is performed check the following
     		if(!frame.hands().isEmpty()){
     			HandList hl = frame.hands();
     			for(int i = 0; i < hl.count(); i++){
     				Hand hand = hl.get(i);
-    				int id = hand.id();
+    				//System.out.println(hand.grabStrength());
+    				if(hand.grabStrength() >= grabThreshold){//if it is a grab, do something
+    					//System.out.println("True");
+    					Vector tl = hand.translation(frame);
+    					int x_trans = (int) (tl.getX() * x_scalar);
+    					int y_trans = (int) (tl.getY() * y_scalar);
+    					Point p = world.getSelectedElement().getLocation();
+    					p.x = p.x + x_trans;
+    					p.y = p.y + y_trans;
+    					world.getSelectedElement().setPoint(p);
+    					System.out.println("moved shit");
+    					break;
+    				}    				
     					if(controller.frame(5) != null){
     						Frame prev = controller.frame(5);
     						HandList phl = prev.hands();
     						for(int h = 0; h < phl.count(); h++){
     							if(phl.get(h).id() ==(hand.id())){
     								Hand ph = phl.get(h);
-    								if(hand.pinchStrength() > ph.pinchStrength() + 0.2){
+    								if(hand.pinchStrength() > ph.pinchStrength() + pinchDifference){
     									//world.resizeImage(0.5);
     									System.out.println("Shrink");
+    									break;
     								}
-    								else if(hand.pinchStrength() < ph.pinchStrength() - 0.2){
+    								else if(hand.pinchStrength() < ph.pinchStrength() - pinchDifference){
     									//world.resizeImage(1.5);
     									System.out.println("enlarge");
+    									break;
     								}
     							}
     						}
+    					}
+    					FingerList fingerList = hand.fingers();
+    					boolean onlyIndex = true;
+    					int ind = 0;
+    					for(int f = 0; f < fingerList.count(); f++){
+    						if(fingerList.get(f).type().equals(Finger.Type.TYPE_INDEX)){
+    							ind = f;
+    							if(!fingerList.get(f).isExtended()){
+    								onlyIndex = false;
+    							}
+    						}
+    						else {
+    							if(fingerList.get(f).isExtended()){
+    								onlyIndex = false;
+    							}
+    						}
+    					}
+    					if(onlyIndex){
+    						Vector tl = hand.translation(frame);
+        					int x_trans = (int) (tl.getX() * x_scalar);
+        					int y_trans = (int) (tl.getY() * y_scalar);
+        					Point p = world.getCursor();
+        					p.x = p.x + x_trans;
+        					p.y = p.y + y_trans;
+        					System.out.println("pointer Moved");
+        					world.setCursor(p);
     					}
     			}
     		}
