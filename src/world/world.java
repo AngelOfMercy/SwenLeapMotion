@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 
 public class World {
 	
+	private static final int LEFT_X_BOUND = -200;
+	private static final int TOP_Y_BOUND = 0;
 	
 	private ArrayList<BufferedImage> image_gallery;
 	private ArrayList<Element> world_obj;
@@ -46,10 +48,12 @@ public class World {
 	}
 	
 	public void setCursor(Point p){
-		cursor = p;
+		this.setCusor(p.x, p.y);
 	}
 	
 	public void setCusor(int x, int y){
+		x = Math.max(LEFT_X_BOUND, x);
+		y = Math.max(TOP_Y_BOUND, y);
 		cursor = new Point(x, y);
 	}
 	//--------------------------------------------------
