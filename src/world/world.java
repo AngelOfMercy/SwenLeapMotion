@@ -34,6 +34,10 @@ public class World {
 	public void addImageToWorld(int x, int y, BufferedImage i){
 		world_obj.add(new Element(i, new Point(x, y)));
 	}
+	
+	public void rotateImage(int degree){
+		world_obj.get(selectedIndex).rotateImage(degree);
+	}
 	//--------------------------------------------------
 	//Cursor Manipulation
 	//--------------------------------------------------
@@ -60,26 +64,44 @@ public class World {
 			return false;
 		Element e = world_obj.remove(selectedIndex);
 		e.increment_z();
-		
-		
-		
 		for(int i = selectedIndex; i <= world_obj.size(); ++i){
 			//If it gets to the end of the list, add it to the end.
 			if(i == world_obj.size()){
 				world_obj.add(e);
 				return true;
-			}
-			
+			}	
 			else if(e.getZ_Value() >= world_obj.get(i).getZ_Value()){
 				world_obj.add(i, e);
 				return true;
 			}
-				
-			
 		}
-		
 		return false;	
 	}
+	
+	/**
+	 * Moves the selected object one 'set' away from the user.
+	 * @return If the operation was successful.
+	 */
+	public boolean moveBackward(){
+		if(selectedIndex == 0)
+			return false;
+		Element e = world_obj.remove(selectedIndex);
+		e.decrement_z();
+		for(int i = selectedIndex-1; i >= -1; --i){
+			System.out.println("Test:" + i);
+			//If it gets to the start of the list, add it to the start.
+			if(i == -1){
+				world_obj.add(0, e);
+				return true;
+			}		
+			else if(e.getZ_Value() >= world_obj.get(i).getZ_Value()){
+				world_obj.add(i, e);
+				return true;
+			}
+		}	
+		return false;	
+	}
+	
 	/**
 	 * Returns the element at a give point in 2D space.
 	 * @param x The horizontal co-ordinate
@@ -102,37 +124,6 @@ public class World {
 			};
 		}
 		return false;
-	}
-	
-	/**
-	 * Moves the selected object one 'set' away from the user.
-	 * @return If the operation was successful.
-	 */
-	public boolean moveBackward(){
-		if(selectedIndex == 0)
-			return false;
-		Element e = world_obj.remove(selectedIndex);
-		e.decrement_z();
-		
-		
-		
-		for(int i = selectedIndex-1; i >= -1; --i){
-			System.out.println("Test:" + i);
-			//If it gets to the end of the list, add it to the end.
-			if(i == -1){
-				world_obj.add(0, e);
-				return true;
-			}
-			
-			else if(e.getZ_Value() >= world_obj.get(i).getZ_Value()){
-				world_obj.add(i, e);
-				return true;
-			}
-				
-			
-		}
-		
-		return false;	
 	}
 	
 	public Element getSelectedElement(){
@@ -187,8 +178,6 @@ public class World {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    }
-	    
-	    
+	    }   
 	}
 }
